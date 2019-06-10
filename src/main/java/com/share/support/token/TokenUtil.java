@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
+ * jwt生成token
  * @author fuxuan
  * @date 2019/6/10 0010 11:06
  * @description
@@ -32,7 +33,7 @@ public class TokenUtil {
 
     private static String value;
 
-    @Value("${config.token.secret}")
+    @Value("${token.secret}")
     public void setValue(String v) {
         value = v;
     }

@@ -4,7 +4,7 @@ import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.request.OapiRobotSendRequest;
 import com.dingtalk.api.response.OapiRobotSendResponse;
 import com.taobao.api.ApiException;
-import com.share.support.expection.MsgExpection;
+import com.share.support.expection.ServiceExpection;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class DingDingTalk {
      * @param isAtAll   是否@所有人
      * @param dingUrl   dingding 机器人url
      */
-    public static void sendText(String content, List<String> atMobiles, Boolean isAtAll, String dingUrl) throws MsgExpection {
+    public static void sendText(String content, List<String> atMobiles, Boolean isAtAll, String dingUrl) throws ServiceExpection {
         com.dingtalk.api.DingTalkClient client = new DefaultDingTalkClient(dingUrl);
         OapiRobotSendRequest request = new OapiRobotSendRequest();
         request.setMsgtype("text");
@@ -39,7 +39,7 @@ public class DingDingTalk {
         try {
             OapiRobotSendResponse response = client.execute(request);
         } catch (ApiException e) {
-            throw new MsgExpection(e.getErrCode(), e.getErrMsg());
+            throw new ServiceExpection(e.getErrCode(), e.getErrMsg());
         }
     }
 
@@ -52,7 +52,7 @@ public class DingDingTalk {
      * @param picUrl     图片URL
      * @param dingUrl    dingding 机器人url
      */
-    public static void sendLink(String title, String text, String messageUrl, String picUrl, String dingUrl) throws MsgExpection {
+    public static void sendLink(String title, String text, String messageUrl, String picUrl, String dingUrl) throws ServiceExpection {
         com.dingtalk.api.DingTalkClient client = new DefaultDingTalkClient(dingUrl);
         OapiRobotSendRequest request = new OapiRobotSendRequest();
         request.setMsgtype("link");
@@ -65,7 +65,7 @@ public class DingDingTalk {
         try {
             OapiRobotSendResponse response = client.execute(request);
         } catch (ApiException e) {
-            throw new MsgExpection(e.getErrCode(), e.getErrMsg());
+            throw new ServiceExpection(e.getErrCode(), e.getErrMsg());
         }
     }
 
@@ -78,7 +78,7 @@ public class DingDingTalk {
      * @param isAtAll   @所有人时：true，否则为：false
      * @param dingUrl   dingding 机器人url
      */
-    public static void sendMarkdown(String title, String text, List<String> atMobiles, Boolean isAtAll, String dingUrl) throws MsgExpection {
+    public static void sendMarkdown(String title, String text, List<String> atMobiles, Boolean isAtAll, String dingUrl) throws ServiceExpection {
         com.dingtalk.api.DingTalkClient client = new DefaultDingTalkClient(dingUrl);
         OapiRobotSendRequest request = new OapiRobotSendRequest();
         request.setMsgtype("markdown");
@@ -93,7 +93,7 @@ public class DingDingTalk {
         try {
             OapiRobotSendResponse response = client.execute(request);
         } catch (ApiException e) {
-            throw new MsgExpection(e.getErrCode(), e.getErrMsg());
+            throw new ServiceExpection(e.getErrCode(), e.getErrMsg());
         }
     }
 
