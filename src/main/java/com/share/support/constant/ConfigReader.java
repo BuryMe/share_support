@@ -2,6 +2,8 @@ package com.share.support.constant;
 
 import com.google.common.base.CaseFormat;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,8 @@ public class ConfigReader {
     // 随便写点，测试远程仓库连接是否顺畅 --- by zian
     // 随便写点，测试远程仓库连接是否顺畅 --- by zian
     // 随便写点，测试远程仓库连接是否顺畅 --- by zian
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
 
     public static String demo;
 
