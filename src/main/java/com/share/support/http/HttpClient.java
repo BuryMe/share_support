@@ -1,10 +1,14 @@
 package com.share.support.http;
 
+import com.google.common.collect.Maps;
 import com.squareup.okhttp.*;
-import com.sun.javafx.iio.ios.IosDescriptor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * OK http
@@ -17,35 +21,79 @@ public class HttpClient {
 
     private static final OkHttpClient okHttpClient = new OkHttpClient();
 
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
+    private static String SPOST = "SPosT";
+
+    private static String SGET = "SGet";
+
+    private static String APOST = "APost";
+
+    private static String AGET = "AGet";
+
 
     /**
-     * 同步 发送post请求
+     * 同步 Http请求方法封装
      *
-     * @param url
-     * @param json json数据
+     * @param requestType       SPost 表示POST请求，SGet 表示GET请求
+     * @param url               请求url
+     * @param requestJsonString 请求参数JSONString，如果为GET请求则传null.
+     * @param headerMap         请求头封装map
      * @return
      * @throws IOException
      */
-    public static String synchronizePost(String url, String json) throws IOException {
-        Request request = new Request.Builder().url(url).post(RequestBody.create(JSON, json)).build();
+    public static String synchronizeRequest(String requestType, String url, String requestJsonString, Map<String, String> headerMap) throws IOException {
+        Headers.Builder headerBuilder = new Headers.Builder();
+        if (!CollectionUtils.isEmpty(headerMap)) {
+            headerMap.forEach((k, v) -> headerBuilder.add(k, v));
+        }
+        Request.Builder requestBuilder = new Request.Builder();
+        Request request;
+        if (Objects.equals(requestType, SPOST)) {
+            request = requestBuilder.url(url).headers(headerBuilder.build()).post(RequestBody.create(JSON, requestJsonString)).build();
+        } else if (Objects.equals(requestType, SGET)) {
+            request = requestBuilder.url(url).headers(headerBuilder.build()).build();
+        } else {
+            throw new IOException("requestType error:" + requestType);
+        }
         Response response = okHttpClient.newCall(request).execute();
         if (!response.isSuccessful()) {
-            throw new IOException("Unexpected code " + response);
+            throw new IOException("Http Communication failure:" + response);
         }
-        return response.body().string();
+        return response.body().toString();
     }
 
     /**
-     * 异步 发送post请求
+     * 异步http请求封装
      *
-     * @param url
-     * @param json             json数据
-     * @param responseCallback 回调处理线程
+     * @param requestType       APost 表示POST请求，AGet 表示GET请求
+     * @param url               请求url
+     * @param requestJsonString 请求参数JSONString，如果为GET请求则传null.
+     * @param headerMap         请求头封装map
+     * @param responseCallback  response处理线程
      * @throws IOException
      */
-    public static void asynchronousPost(String url, String json, Callback responseCallback) throws IOException {
-        Request request = new Request.Builder().url(url).post(RequestBody.create(JSON, json)).build();
+    public static void asynchronousRequest(String requestType, String url, String requestJsonString, Map<String, String> headerMap, Callback responseCallback) throws IOException {
+        Headers.Builder headerBuilder = new Headers.Builder();
+        if (!CollectionUtils.isEmpty(headerMap)) {
+            headerMap.forEach((k, v) -> headerBuilder.add(k, v));
+        }
+        Request.Builder requestBuilder = new Request.Builder();
+        Request request;
+        if (Objects.equals(requestType, APOST)) {
+            request = requestBuilder.url(url).post(RequestBody.create(JSON, requestJsonString)).headers(headerBuilder.build()).build();
+        } else if (Objects.equals(requestType, AGET)) {
+            request = requestBuilder.url(url).headers(headerBuilder.build()).build();
+        } else {
+            throw new IOException("requestType error:" + requestType);
+        }
         okHttpClient.newCall(request).enqueue(responseCallback);
+    }
+
+
+    public static void main(String[] args) throws IOException {
+
     }
 }

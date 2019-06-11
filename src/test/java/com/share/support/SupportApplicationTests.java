@@ -1,13 +1,12 @@
 package com.share.support;
 
 import com.nimbusds.jose.JOSEException;
+import com.share.support.constant.ConfigReader;
 import com.share.support.token.TokenUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
@@ -28,8 +27,6 @@ public class SupportApplicationTests {
 //        value = v;
 //    }
 
-    @Autowired
-    ConfigReaderService configReaderService;
 
     @Autowired
     TokenUtil tokenUtil;
@@ -43,6 +40,12 @@ public class SupportApplicationTests {
         System.out.println(TokenUtil.creatToken(map));
         System.out.println(TokenUtil.valid(TokenUtil.creatToken(map)));
 
+    }
+
+    @Test
+    public void test1(){
+        System.out.println(ConfigReader.demo);
+        System.out.println(ConfigReader.tokenSecret);
     }
 
 }
