@@ -39,11 +39,8 @@ public class ConfigReader {
         Field[] fields = ConfigReader.class.getFields();
         for (Field field : fields) {
             String name = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_HYPHEN, field.getName());
-            log.info(name);
             String propertyName = name.replaceAll("-",".");
-            log.info(propertyName);
             field.set(configReaderService, getPropertyValue( propertyName));
-
         }
     }
 
